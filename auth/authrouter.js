@@ -25,10 +25,10 @@ router.post('/login', async (req, res, next) => {
 })
 
 router.post('/register', async (req, res, next) => {
-  const { username, password } = req.body
+  const user = req.body
   try {
-    const hashed = bcrypt.hashSync(password, 10)
-    const newUser = await db.createNewUser({ username, hashed })
+    user.password = bcrypt.hashSync(user.password, 10)
+    const newUser = await db.createNewUser(user)
     newUser ?
       res.status(201).json({ ...newUser, token: await generateToken(newUser) })
       :
@@ -42,7 +42,8 @@ router.post('/register', async (req, res, next) => {
 function generateToken(user) {
   const payload = {
     subject: user.id,
-    username: user.username
+    username: user.username,
+    department: user.department
   }
 
   const secret = process.env.JWT_SECRET || 'it\'s a secret to everyone'

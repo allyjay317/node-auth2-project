@@ -4,6 +4,7 @@ const helmet = require('helmet')
 
 const userRouter = require('../users/userrouter')
 const authRouter = require('../auth/authrouter')
+const errorMiddleware = require('./error-middleware')
 
 const server = express()
 
